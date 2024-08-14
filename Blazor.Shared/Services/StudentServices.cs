@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace Blazor.Shared.Services
 {
-    public class StudentServices
+    public class StudentServices : IStudentServices
     {
         string ConnectionString = string.Empty;
         private readonly IConfiguration _configuration;
@@ -19,7 +19,7 @@ namespace Blazor.Shared.Services
 
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-                SqlCommand cmd = new SqlCommand("GetStudentsRecord", con);
+                SqlCommand cmd = new SqlCommand("GetStudentRecord", con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 con.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
@@ -52,7 +52,7 @@ namespace Blazor.Shared.Services
 
                 cmd.Parameters.AddWithValue("@FirstName", student.FirstName);
                 cmd.Parameters.AddWithValue("@LastName", student.LastName);
-                cmd.Parameters.AddWithValue("@EmailAddress", student.EmailAddress);
+                cmd.Parameters.AddWithValue("@Email", student.Email);
                 cmd.Parameters.AddWithValue("@Gender", student.Gender);
 
                 con.Open();
@@ -64,15 +64,15 @@ namespace Blazor.Shared.Services
 
         public void UpdateStudent(StudentEntity student)
         {
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-                SqlCommand cmd = new SqlCommand("UpdateStudentRecord", con);
+                SqlCommand cmd = new SqlCommand("UpDateStudent", con);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@StudentID", student.StudentID);
+                cmd.Parameters.AddWithValue("@StudentId", student.StudentId);
                 cmd.Parameters.AddWithValue("@FirstName", student.FirstName);
                 cmd.Parameters.AddWithValue("@LastName", student.LastName);
-                cmd.Parameters.AddWithValue("@EmailAddress", student.EmailAddress);
+                cmd.Parameters.AddWithValue("@Email", student.Email);
                 cmd.Parameters.AddWithValue("@Gender", student.Gender);
 
                 con.Open();
@@ -82,13 +82,13 @@ namespace Blazor.Shared.Services
         }
 
 
-        public void DeleteStudent(int? StudentID)
+        public void DeleteStudent(int? StudentId)
         {
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-                SqlCommand cmd = new SqlCommand("DeleteStudentRecord", con);
+                SqlCommand cmd = new SqlCommand("DeleteStudent", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@StudentID", StudentID);
+                cmd.Parameters.AddWithValue("@StudentId", StudentId);
                 con.Open();
                 cmd.ExecuteNonQuery();
                 con.Close();

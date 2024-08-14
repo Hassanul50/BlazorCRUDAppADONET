@@ -1,0 +1,57 @@
+﻿@page "/Student-List"
+@inject HttpClient Http
+
+<PageTitle>Student List</PageTitle>
+
+<h1>Student List</h1>
+
+
+
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>First Name</th>
+                <th>last Name</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>Created On</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var students in studentslist)
+            {
+                <tr>
+                    <td>@students.StudentId</td>
+                    <td>@students.FirstName</td>
+                    <td>@students.LastName</td>
+                    <td>@students.Email</td>
+                    <td>@students.Gender</td>
+                    <td>@students.CreatedOn</td>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+@code {
+    protected List<StudentEntity> studentslist = new List<StudentEntity>();
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+    // }
+    protected override async Task OnInitializedAsync()
+    {
+        await GetStudentList();
+    }
+    public async Task GetStudentList()
+    {
+        string apiUrl = "https://localhost:7117/api/students/get-students-list";
+        // var response = await Http.GetStringAsync(apiUrl);
+        studentslist = await Http.GetFromJsonAsync<List<StudentEntity>>(apiUrl);
+    }
+    
+}
